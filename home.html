@@ -45,15 +45,15 @@
 
             <input id="all-issue" type="radio" name="tabs" class="btn checked:bg-primary checked:text-white" aria-label="All"
                 checked />
-            <input type="radio" name="tabs" class="btn checked:bg-primary checked:text-white" aria-label="Open" />
-            <input type="radio" name="tabs" class="btn checked:bg-primary checked:text-white" aria-label="Closed" />
+            <input id="open-issue" type="radio" name="tabs" class="btn checked:bg-primary checked:text-white" aria-label="Open" />
+            <input id="closed-issue" type="radio" name="tabs" class="btn checked:bg-primary checked:text-white" aria-label="Closed" />
 
         </div>
         <div class="flex gap-3 p-6 bg-base-100 shadow-sm rounded-xl w-full justify-between">
             <div class="flex w-fit gap-3">
                 <img class="w-12 h-12" src="./assets/Aperture.png" alt="">
                 <div>
-                    <h3 class="text-xl font-semibold "><span class="pr-1">50</span>Issue</h3>
+                    <h3 class="text-xl font-semibold "><span id="card-length" class="pr-1">50</span>Issue</h3>
                     <p>Track and manage your project issues</p>
                 </div>
             </div>
@@ -64,22 +64,6 @@
         </div>
 
         <div id="issuesContainer" class="grid grid-cols-4 p-4 bg-slate-50 rounded-xl">
-            <!-- <div class="col-span-1 bg-base-100 shadow-lg rounded-lg p-3 border-t-3 border-green-500">
-                <div class="flex justify-between">
-                    <img class="w-6 h-6" src="./assets/Open-Status.png" alt="">
-                    <p class="px-2 py-1 rounded-xl text-amber-400 bg-yellow-100 font-medium text-xs">MEDIUM</p>
-                </div>
-                <h2 class="font-semibold text-sm py-1">Fix navigation menu on mobile devices</h2>
-                <p class="text-xs font-normal text-slate-500">The navigation menu doesn't collapse properly on mobile devices...</p>
-                <div class="flex border-b-1 border-slate-400 pt-2 pb-3 gap-3">
-                    <p class="font-medium text-xs px-2 py-1 rounded-xl text-pink-400 bg-rose-100"><span><i class="fa-solid fa-bug"></i></span>Bug</p>
-                    <p class="font-medium text-xs px-2 py-1 rounded-xl text-amber-400 bg-yellow-100"> <span><i class="fa-regular fa-life-ring"></i></span>Help Wanted</p>
-                </div>
-                <p class="text-xs font-normal text-slate-500 py-1">#1
-                    by john_doe</p>
-                <p class="text-xs font-normal text-slate-500">1/15/2024</p>
-
-            </div> -->
 
         </div>
 

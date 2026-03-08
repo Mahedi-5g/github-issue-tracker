@@ -1,5 +1,24 @@
 
 const issuesContainer = document.getElementById("issuesContainer");
+const allIssue=document.getElementById("all-issue");
+const openIssue = document.getElementById("open-issue");
+const closedIssue = document.getElementById("closed-issue");
+const cardLength = document.getElementById("card-length");
+
+let allIssuesData =[];
+
+allIssue.addEventListener("change",()=>{
+    displayIssues(allIssuesData);
+});
+
+openIssue.addEventListener("change",()=>{
+    const openIssues = allIssuesData.filter(issue=>issue.status ==="open");
+    displayIssues(openIssues)
+})
+closedIssue.addEventListener("change",()=>{
+    const closedIssues = allIssuesData.filter(issue=>issue.status ==="closed");
+    displayIssues(closedIssues);
+})
 
 const labelStyles = {
   "bug": {
@@ -30,11 +49,14 @@ function issueStatus(status) {
 async function loadAllIssue() {
     const res = await fetch("https://phi-lab-server.vercel.app/api/v1/lab/issues");
     const data = await res.json();
-    displayIssues(data.data);
+    // displayIssues(data.data);
+    allIssuesData = data.data;
+    displayIssues(allIssuesData);
 }
 
 function displayIssues(issues) {
-    console.log(issues);
+     issuesContainer.innerHTML = "";
+    cardLength.innerHTML =issues.length;
 
     issues.forEach(issue => {
         // lebel apply
@@ -54,14 +76,14 @@ function displayIssues(issues) {
         // creat card
         const card = document.createElement("div");
         const borderColorClass = issue.status === "open" ? "border-green-500" : "border-purple-500";
-
         card.className = `col-span-1 bg-base-100 shadow-lg rounded-lg p-3 border-t-3 ${borderColorClass} m-2`;
+        const priorityColorClass =issue.priority ==="high"?"text-pink-400 bg-rose-100":issue.priority==="medium"?"text-amber-400 bg-yellow-100 ":"text-slate-400 bg-slate-100";
 
         card.innerHTML = `
             <div>
                 <div class="flex justify-between items-center">
                     <div class="status-container"></div>
-                    <p class="px-2 py-1 rounded-xl text-amber-400 bg-yellow-100 font-medium text-xs">${issue.priority}</p>
+                    <p class="px-2 py-1 rounded-xl ${priorityColorClass} text-xs">${issue.priority}</p>
                 </div>
                 <h2 class="font-semibold text-sm py-1">${issue.title}</h2>
                 <p class="text-xs font-normal text-slate-500">${issue.description}</p>
