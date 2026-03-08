@@ -1,43 +1,73 @@
 
 const issuesContainer = document.getElementById("issuesContainer");
-const allIssue=document.getElementById("all-issue");
+const allIssue = document.getElementById("all-issue");
 const openIssue = document.getElementById("open-issue");
 const closedIssue = document.getElementById("closed-issue");
 const cardLength = document.getElementById("card-length");
+const modalTitle = document.getElementById("modalTitle");
+const modalDescription = document.getElementById("modalDescription");
+const modalStatus = document.getElementById("modalStatus");
+const modalLebels = document.getElementById("modalLebels");
+const modalPriority = document.getElementById("modalPriority");
+const modalAuthor = document.getElementById("modalAuthor");
+const searchInput = document.getElementById("searchInput");
 
-let allIssuesData =[];
+let allIssuesData = [];
 
-allIssue.addEventListener("change",()=>{
+allIssue.addEventListener("change", () => {
     displayIssues(allIssuesData);
 });
 
-openIssue.addEventListener("change",()=>{
-    const openIssues = allIssuesData.filter(issue=>issue.status ==="open");
+openIssue.addEventListener("change", () => {
+    const openIssues = allIssuesData.filter(issue => issue.status === "open");
     displayIssues(openIssues)
-})
-closedIssue.addEventListener("change",()=>{
-    const closedIssues = allIssuesData.filter(issue=>issue.status ==="closed");
+});
+closedIssue.addEventListener("change", () => {
+    const closedIssues = allIssuesData.filter(issue => issue.status === "closed");
     displayIssues(closedIssues);
-})
+});
+
+
+searchInput.addEventListener("input",()=>{
+ const searchText =searchInput.value.toLowerCase();
+
+ const filteredIssues = allIssuesData.filter(issue=>{
+    issue.title.toLowerCase().includes(searchText)
+ });
+ displayIssues(filteredIssues);
+});
+
 
 const labelStyles = {
-  "bug": {
-    color: "text-pink-400 bg-rose-100",
-    icon: "fa-solid fa-bug"
-  },
-  "help wanted": {
-    color: "text-amber-400 bg-yellow-100",
-    icon: "fa-regular fa-life-ring"
-  },
-  "enhancement": {
-    color: "bg-green-100 text-green-500",
-    icon: "fa-brands fa-sith"
-  },
-  "good first issue": {
-    color: "text-blue-500 bg-blue-100",
-    icon: "fa-regular fa-thumbs-up"
-  },
+    "bug": {
+        color: "text-pink-400 bg-rose-100",
+        icon: "fa-solid fa-bug"
+    },
+    "help wanted": {
+        color: "text-amber-400 bg-yellow-100",
+        icon: "fa-regular fa-life-ring"
+    },
+    "enhancement": {
+        color: "bg-green-100 text-green-500",
+        icon: "fa-brands fa-sith"
+    },
+    "good first issue": {
+        color: "text-blue-500 bg-blue-100",
+        icon: "fa-regular fa-thumbs-up"
+    },
 };
+
+function showIssueDetails(issue) {
+    modalTitle.innerText = issue.title;
+    modalDescription.innerText = issue.description;
+    modalStatus.innerText = issue.status;
+    modalAuthor.innerText = issue.author;
+    modalPriority.innerText = issue.priority;
+    modalLebels.innerHTML = issue.labels.map(lebel => {
+        return `<p class="px-2 py-1 bg-gray-100 rounded">${lebel}</p>`
+    }).join("");
+    my_modal_5.showModal();
+}
 
 function issueStatus(status) {
     const img = document.createElement("img");
@@ -55,8 +85,9 @@ async function loadAllIssue() {
 }
 
 function displayIssues(issues) {
-     issuesContainer.innerHTML = "";
-    cardLength.innerHTML =issues.length;
+    issuesContainer.innerHTML = "";
+    cardLength.innerHTML = issues.length;
+
 
     issues.forEach(issue => {
         // lebel apply
@@ -75,9 +106,12 @@ function displayIssues(issues) {
 
         // creat card
         const card = document.createElement("div");
+        card.addEventListener("click", () => {
+            showIssueDetails(issue);
+        });
         const borderColorClass = issue.status === "open" ? "border-green-500" : "border-purple-500";
         card.className = `col-span-1 bg-base-100 shadow-lg rounded-lg p-3 border-t-3 ${borderColorClass} m-2`;
-        const priorityColorClass =issue.priority ==="high"?"text-pink-400 bg-rose-100":issue.priority==="medium"?"text-amber-400 bg-yellow-100 ":"text-slate-400 bg-slate-100";
+        const priorityColorClass = issue.priority === "high" ? "text-pink-400 bg-rose-100" : issue.priority === "medium" ? "text-amber-400 bg-yellow-100 " : "text-slate-400 bg-slate-100";
 
         card.innerHTML = `
             <div>
