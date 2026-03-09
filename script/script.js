@@ -10,7 +10,8 @@ const modalStatus = document.getElementById("modalStatus");
 const modalLebels = document.getElementById("modalLebels");
 const modalPriority = document.getElementById("modalPriority");
 const modalAuthor = document.getElementById("modalAuthor");
-const searchInput = document.getElementById("searchInput");
+const showLoading = document.getElementById("loadingSpinner");
+
 
 let allIssuesData = [];
 
@@ -25,16 +26,6 @@ openIssue.addEventListener("change", () => {
 closedIssue.addEventListener("change", () => {
     const closedIssues = allIssuesData.filter(issue => issue.status === "closed");
     displayIssues(closedIssues);
-});
-
-
-searchInput.addEventListener("input",()=>{
- const searchText =searchInput.value.toLowerCase();
-
- const filteredIssues = allIssuesData.filter(issue=>{
-    issue.title.toLowerCase().includes(searchText)
- });
- displayIssues(filteredIssues);
 });
 
 
@@ -77,9 +68,11 @@ function issueStatus(status) {
 }
 
 async function loadAllIssue() {
+    showLoading.classList.remove("hidden");
+    showLoading.classList.add("flex")
     const res = await fetch("https://phi-lab-server.vercel.app/api/v1/lab/issues");
     const data = await res.json();
-    // displayIssues(data.data);
+    showLoading.classList.add("hidden");
     allIssuesData = data.data;
     displayIssues(allIssuesData);
 }
@@ -144,5 +137,46 @@ function displayIssues(issues) {
         issuesContainer.appendChild(card);
     });
 };
+
+
+const searchBtn = document.getElementById("searchBtn");
+
+searchBtn.addEventListener("click", () => {
+
+    const searchInput = document.getElementById("searchInput");
+    const inputValue = searchInput.value.trim().toLowerCase();
+
+    if (!inputValue) {
+        displayIssues(allIssuesData);
+        return;
+    }
+
+    showLoading.classList.remove("hidden");
+    showLoading.classList.add("flex");
+
+    fetch(`https://phi-lab-server.vercel.app/api/v1/lab/issues/search?q=${inputValue}`)
+        .then(res => res.json())
+        .then(data => {
+
+            showLoading.classList.add("hidden");
+
+            const issuesData = data.data;
+
+            if (issuesData.length === 0) {
+                issuesContainer.innerHTML = `
+                                     <div class="col-span-4 text-center py-10 text-gray-500">
+                                    <i class="fa-solid fa-face-sad-tear text-3xl mb-2"></i>
+                                    <p class="text-lg font-medium">Your search did not match any issues</p>
+                                    </div>
+                                  `;
+                return;
+            }
+
+            displayIssues(issuesData);
+
+        });
+
+});
+
 
 loadAllIssue();
